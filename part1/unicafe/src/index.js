@@ -9,11 +9,11 @@ const Header = ({ content }) => (
     <h1>{content}</h1>
 )
 
-const Result = ({ title, result }) => (
-    <div>{title} {result}</div>
+const Statistic = ({ text, value }) => (
+    <div>{text} {value}</div>
 )
 
-const Statistic = ({ good, neutral, bad }) => {
+const Statistics = ({ good, neutral, bad }) => {
     const all = good + neutral + bad;
 
     if (all === 0) {
@@ -24,12 +24,12 @@ const Statistic = ({ good, neutral, bad }) => {
 
     return (
         <div>
-            <Result title="good" result={good} />
-            <Result title="neutral" result={neutral} />
-            <Result title="bad" result={bad} />
-            <Result title="all" result={all} />
-            <Result title="average" result={average} />
-            <Result title="positive" result={positive} />
+            <Statistic text="good" value={good} />
+            <Statistic text="neutral" value={neutral} />
+            <Statistic text="bad" value={bad} />
+            <Statistic text="all" value={all} />
+            <Statistic text="average" value={average} />
+            <Statistic text="positive" value={positive} />
         </div>
     )
 }
@@ -47,7 +47,7 @@ const App = () => {
             <Button handleClick={() => { setNeutral(neutral + 1) }} name="neutral" />
             <Button handleClick={() => { setBad(bad + 1) }} name="bad" />
             <Header content="statistics" />
-            <Statistic good={good} neutral={neutral} bad={bad} />
+            <Statistics good={good} neutral={neutral} bad={bad} />
         </div>
     )
 }
