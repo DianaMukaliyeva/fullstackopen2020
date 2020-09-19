@@ -13,14 +13,17 @@ const Result = ({ title, result }) => (
     <div>{title} {result}</div>
 )
 
-const Statistic = ({ title, good, neutral, bad }) => {
+const Statistic = ({ good, neutral, bad }) => {
     const all = good + neutral + bad;
-    const average = all !== 0 ? (good - bad) / all : 0;
-    const positive = all !== 0 ? good / all * 100 + ' %' : 0 + ' %';
+
+    if (all === 0) {
+        return <div>No feedback given</div>
+    }
+    const average = (good - bad) / all;
+    const positive = good / all * 100 + ' %';
 
     return (
         <div>
-            <Header content={title} />
             <Result title="good" result={good} />
             <Result title="neutral" result={neutral} />
             <Result title="bad" result={bad} />
@@ -43,7 +46,8 @@ const App = () => {
             <Button handleClick={() => { setGood(good + 1) }} name="good" />
             <Button handleClick={() => { setNeutral(neutral + 1) }} name="neutral" />
             <Button handleClick={() => { setBad(bad + 1) }} name="bad" />
-            <Statistic title="statistics" good={good} neutral={neutral} bad={bad} />
+            <Header content="statistics" />
+            <Statistic good={good} neutral={neutral} bad={bad} />
         </div>
     )
 }
