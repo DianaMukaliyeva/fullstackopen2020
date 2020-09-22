@@ -12,7 +12,11 @@ const App = () => {
     const addContact = event => {
         event.preventDefault();
         const newContact = { name: newName };
-        setPersons(persons.concat(newContact));
+        if (persons.filter(person => person.name === newContact.name).length > 0) {
+            alert(`${newContact.name}  is already added to phonebook`);
+        } else {
+            setPersons(persons.concat(newContact));
+        }
         setNewName('');
     };
 
