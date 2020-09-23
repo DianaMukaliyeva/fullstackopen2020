@@ -18,6 +18,10 @@ const App = () => {
         setResult(countries.filter(country => country.name.toLowerCase().includes(filter.toLowerCase())));
     }, [filter, countries]);
 
+    const showCountry = country => {
+        setResult([country]);
+    };
+
     const handleFilter = event => {
         setFilter(event.target.value);
     };
@@ -25,7 +29,7 @@ const App = () => {
     return (
         <div className='App'>
             <Filter filter={filter} handleFilter={handleFilter} />
-            {filter === '' ? '' : <Countries countries={result} />}
+            {filter === '' ? '' : <Countries countries={result} showCountry={showCountry} />}
         </div>
     );
 };
