@@ -34,10 +34,29 @@ const App = () => {
 
     const addContact = event => {
         event.preventDefault();
-        const newContact = { name: newName, number: newNumber };
-        if (persons.filter(person => person.name === newContact.name).length > 0) {
-            alert(`${newContact.name}  is already added to phonebook`);
+        const sameNameContact = persons.filter(person => person.name === newName)[0];
+
+        if (newName === '' || newNumber === '') {
+            alert('fields should not be empty');
+        } else if (sameNameContact) {
+            const confirm = window.confirm(`${sameNameContact.name} is already added to phonebook,
+                replace the old number with a  new one?`);
+            if (confirm) {
+                personService
+                    .update({ ...sameNameContact, number: newNumber })
+                    .then(updatedContact => {
+                        setPersons(
+                            persons.map(person => (person.id === sameNameContact.id ? updatedContact : person))
+                        );
+                        setNewName('');
+                        setNewNumber('');
+                    })
+                    .catch(() => {
+                        alert('does not exists!');
+                    });
+            }
         } else {
+            const newContact = { name: newName, number: newNumber };
             personService.create(newContact).then(returnedContact => {
                 setPersons(persons.concat(returnedContact));
                 setNewName('');

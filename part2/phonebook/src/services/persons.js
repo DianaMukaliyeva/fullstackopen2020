@@ -6,8 +6,13 @@ const getAll = () => {
     return request.then(response => response.data);
 };
 
-const create = newObject => {
-    const request = axios.post(baseUrl, newObject);
+const create = contact => {
+    const request = axios.post(baseUrl, contact);
+    return request.then(response => response.data);
+};
+
+const update = contact => {
+    const request = axios.put(`${baseUrl}/${contact.id}`, contact);
     return request.then(response => response.data);
 };
 
@@ -20,4 +25,5 @@ export default {
     getAll,
     create,
     remove,
+    update,
 };
