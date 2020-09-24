@@ -46,6 +46,19 @@ const App = () => {
         }
     };
 
+    const deleteContact = id => {
+        if (window.confirm(`Delete ${id}?`)) {
+            personService
+                .remove(id)
+                .then(() => {
+                    setPersons(persons.filter(person => person.id !== id));
+                })
+                .catch(() => {
+                    alert('does not exists!');
+                });
+        }
+    };
+
     return (
         <div>
             <Header title='Phonebook' />
@@ -59,7 +72,7 @@ const App = () => {
                 handleNumber={handleNumber}
             />
             <Header title='Numbers' />
-            <Contacts persons={personsToShow} />
+            <Contacts persons={personsToShow} deleteContactAction={deleteContact} />
         </div>
     );
 };
