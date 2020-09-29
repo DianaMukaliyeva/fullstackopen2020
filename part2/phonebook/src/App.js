@@ -86,7 +86,7 @@ const App = () => {
             personService
                 .remove(id)
                 .then(() => {
-                    addNotification(`Contact ${name} was successfully removed`, false);
+                    addNotification(`Information of ${name} has been removed from server`, false);
                 })
                 .catch(() => {
                     addNotification(`Information of ${name} has already been removed from server`, true);
