@@ -24,9 +24,17 @@ const mostBlogs = blogs => {
     };
 };
 
+const mostLikes = blogs => {
+    if (blogs.length <= 0) return null;
+    const authors = _.groupBy(blogs, 'author');
+    const authorLikes = _.map(authors, (blogs, author) => ({ author: author, likes: totalLikes(blogs) }));
+    return favoriteBlog(authorLikes);
+};
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
     mostBlogs,
+    mostLikes,
 };
