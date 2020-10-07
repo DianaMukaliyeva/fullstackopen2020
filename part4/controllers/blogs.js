@@ -10,7 +10,7 @@ blogsRouter.post('/', async (request, response) => {
     const blog = new Blog(request.body);
 
     const result = await blog.save();
-    response.status(201).json(result);
+    response.json(result);
 });
 
 module.exports = blogsRouter;
