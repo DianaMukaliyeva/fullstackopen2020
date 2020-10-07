@@ -73,6 +73,15 @@ test('a blog added without likes had default value of likes 0', async () => {
     expect(addedBlog.likes).toEqual(0);
 });
 
+test('adding a blog without title and url returns status 400', async () => {
+    const newBlog = {
+        author: 'Test author',
+        likes: 0,
+    };
+
+    await api.post('/api/blogs').send(newBlog).expect(400);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
