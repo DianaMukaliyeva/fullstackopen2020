@@ -82,6 +82,16 @@ test('adding a blog without title and url returns status 400', async () => {
     await api.post('/api/blogs').send(newBlog).expect(400);
 });
 
+test('an existing blog can be deleted', async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToDelete = blogs[0];
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAfterDeletion = await helper.blogsInDb();
+    const blogNotExist = await blogsAfterDeletion.find(blog => blog.id === blogToDelete.id);
+    expect(blogNotExist).not.toBeDefined();
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
