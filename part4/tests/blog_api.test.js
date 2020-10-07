@@ -92,6 +92,21 @@ test('an existing blog can be deleted', async () => {
     expect(blogNotExist).not.toBeDefined();
 });
 
+test('an existing blog can be updated', async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToUpdate = blogs[0];
+    blogToUpdate.likes = 55;
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate).expect(200);
+
+    const blogsAfterUpdate = await helper.blogsInDb();
+    const updatedBlog = await blogsAfterUpdate.find(blog => blog.id === blogToUpdate.id);
+    expect(updatedBlog.title).toEqual(blogToUpdate.title);
+    expect(updatedBlog.author).toEqual(blogToUpdate.author);
+    expect(updatedBlog.url).toEqual(blogToUpdate.url);
+    expect(updatedBlog.likes).toEqual(blogToUpdate.likes);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
