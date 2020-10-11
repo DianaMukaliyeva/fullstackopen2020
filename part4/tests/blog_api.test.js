@@ -2,9 +2,11 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
 const helper = require('./test_helper');
+const bcrypt = require('bcrypt');
 
 const api = supertest(app);
 
+const User = require('../models/user');
 const Blog = require('../models/blog');
 
 beforeEach(async () => {
@@ -105,6 +107,42 @@ test('an existing blog can be updated', async () => {
     expect(updatedBlog.author).toEqual(blogToUpdate.author);
     expect(updatedBlog.url).toEqual(blogToUpdate.url);
     expect(updatedBlog.likes).toEqual(blogToUpdate.likes);
+});
+
+describe('when there is initially one user in db', () => {
+    beforeEach(async () => {
+        await User.deleteMany();
+
+        const passwordHash = await bcrypt.hash('password', 10);
+        const user = new User({ username: 'One user', name: 'One name', passwordHash });
+
+        await user.save();
+    });
+
+    test('creation of the new user succeeds ', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: 'New user',
+            name: 'New name',
+            password: 'pass',
+        };
+
+        await api.post('/api/users').send(newUser).expect(200);
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
+
+        const usernames = usersAtEnd.map(user => user.username);
+        expect(usernames).toContain(newUser.username);
+    });
+
+    test('all users are returned', async () => {
+        const response = await api.get('/api/users').expect(200);
+        const usersInDb = await helper.usersInDb();
+
+        expect(response.body).toEqual(usersInDb);
+    });
 });
 
 afterAll(() => {
