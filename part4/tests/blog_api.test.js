@@ -145,6 +145,67 @@ describe('when there is initially one user in db', () => {
     });
 });
 
+describe('invalid user creation', () => {
+    test('creation of the new user fails with no username ', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            name: 'New name',
+            password: 'pass',
+        };
+
+        const result = await api.post('/api/users').send(newUser).expect(400);
+        expect(result.body.error).toBeDefined();
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    });
+
+    test('creation of the new user fails with username less than 3 characters ', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: 'No',
+            password: 'pass',
+        };
+
+        const result = await api.post('/api/users').send(newUser).expect(400);
+        expect(result.body.error).toBeDefined();
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    });
+
+    test('creation of the new user fails with no password ', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: 'Test user',
+        };
+
+        const result = await api.post('/api/users').send(newUser).expect(400);
+        expect(result.body.error).toBeDefined();
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    });
+
+    test('creation of the new user fails with password less than 3 characters', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: 'Test user',
+            password: 'no',
+        };
+
+        const result = await api.post('/api/users').send(newUser).expect(400);
+        expect(result.body.error).toBeDefined();
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    });
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
