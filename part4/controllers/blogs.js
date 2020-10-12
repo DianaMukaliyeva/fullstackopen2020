@@ -27,6 +27,20 @@ blogsRouter.post('/', async (request, response) => {
 });
 
 blogsRouter.delete('/:id', async (request, response) => {
+    const token = request.token;
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const user = await User.findById(decoded.id);
+
+    const blog = await Blog.findById(request.params.id);
+
+    if (!blog) {
+        return response.status(404).json({ error: 'blog does not exists' });
+    }
+
+    if (!token || !decoded.id || !user || blog.user.toString() !== user.id) {
+        return response.status(401).json({ error: 'only creator of this blog can delete it' });
+    }
+
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
 });
