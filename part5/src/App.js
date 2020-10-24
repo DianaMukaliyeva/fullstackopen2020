@@ -10,7 +10,6 @@ import loginService from './services/login';
 const App = () => {
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' });
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(false);
   const [username, setUsername] = useState('');
@@ -41,24 +40,9 @@ const App = () => {
     setUser(null);
   };
 
-  const handleBlogChange = (event) => {
-    setNewBlog({ ...newBlog, [event.target.name]: event.target.value });
-  };
-
   const addNotification = (message, error) => {
     setError(error);
     setMessage(message);
-  };
-
-  const addBlog = async (event) => {
-    event.preventDefault();
-    try {
-      const createdBlog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(createdBlog));
-      addNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`);
-    } catch (e) {
-      addNotification('fields should not be empty', true);
-    }
   };
 
   const handleLogin = async (event) => {
@@ -80,6 +64,16 @@ const App = () => {
     }
   };
 
+  const addBlog = async (newBlog) => {
+    try {
+      const createdBlog = await blogService.create(newBlog);
+      setBlogs(blogs.concat(createdBlog));
+      addNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`);
+    } catch (e) {
+      addNotification('fields should not be empty', true);
+    }
+  };
+
   return (
     <div>
       <h2>{user === null ? 'Log in to application' : 'blogs'}</h2>
@@ -98,7 +92,7 @@ const App = () => {
             {user.name} logged in <button onClick={logout}>logout</button>
           </p>
           <Togglable buttonLabel="create new blog">
-            <BlogForm newBlog={newBlog} handleBlogChange={handleBlogChange} addBlog={addBlog} />
+            <BlogForm addBlog={addBlog} />
           </Togglable>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
