@@ -7,7 +7,8 @@ import loginService from './services/login';
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' });
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
@@ -15,6 +16,13 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage(null);
+      setError(null);
+    }, 5000);
+  }, [message]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser');
@@ -34,16 +42,19 @@ const App = () => {
     setNewBlog({ ...newBlog, [event.target.name]: event.target.value });
   };
 
+  const addNotification = (message, error) => {
+    setError(error);
+    setMessage(message);
+  };
+
   const addBlog = async (event) => {
     event.preventDefault();
     try {
-      const result = await blogService.create(newBlog);
-      setBlogs(blogs.concat(result));
+      const createdBlog = await blogService.create(newBlog);
+      setBlogs(blogs.concat(createdBlog));
+      addNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`);
     } catch (e) {
-      setErrorMessage('Missing fields');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      addNotification('fields should not be empty', true);
     }
   };
 
@@ -62,43 +73,36 @@ const App = () => {
       setUsername('');
       setPassword('');
     } catch (exception) {
-      setErrorMessage('Wrong credentials');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      addNotification('wrong username or password', true);
     }
   };
 
   const loginPage = () => (
-    <div>
-      <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
+        password
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
   );
 
   const blogPage = () => (
     <div>
-      <h2>blogs</h2>
       <p>
         {user.name} logged in <button onClick={logout}>logout</button>
       </p>
@@ -120,7 +124,13 @@ const App = () => {
     </div>
   );
 
-  return <div>{user === null ? loginPage() : blogPage()}</div>;
+  return (
+    <div>
+      <h2>{user === null ? 'Log in to application' : 'blogs'}</h2>
+      <Notification message={message} error={error} />
+      {user === null ? loginPage() : blogPage()}
+    </div>
+  );
 };
 
 export default App;
