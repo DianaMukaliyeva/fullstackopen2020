@@ -74,6 +74,15 @@ const App = () => {
     }
   };
 
+  const updateBlog = async (blogToUpdate) => {
+    try {
+      await blogService.update(blogToUpdate);
+      blogService.getAll().then((blogs) => setBlogs(blogs));
+    } catch (e) {
+      addNotification('some error happened on updating blog', true);
+    }
+  };
+
   return (
     <div>
       <h2>{user === null ? 'Log in to application' : 'blogs'}</h2>
@@ -95,7 +104,7 @@ const App = () => {
             <BlogForm addBlog={addBlog} />
           </Togglable>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
           ))}
         </div>
       )}
