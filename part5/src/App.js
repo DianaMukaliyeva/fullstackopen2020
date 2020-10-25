@@ -77,7 +77,10 @@ const App = () => {
   const updateBlog = async (blogToUpdate) => {
     try {
       await blogService.update(blogToUpdate);
-      blogService.getAll().then((blogs) => setBlogs(blogs));
+      const updatedBlogs = blogs.map((blog) =>
+        blog.id === blogToUpdate.id ? { ...blogToUpdate } : blog
+      );
+      setBlogs(updatedBlogs);
     } catch (e) {
       addNotification('some error happened on updating blog', true);
     }
@@ -103,9 +106,11 @@ const App = () => {
           <Togglable buttonLabel="create new blog">
             <BlogForm addBlog={addBlog} />
           </Togglable>
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
-          ))}
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            ))}
         </div>
       )}
     </div>
