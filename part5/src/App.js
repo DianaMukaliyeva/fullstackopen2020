@@ -69,8 +69,10 @@ const App = () => {
       const createdBlog = await blogService.create(newBlog);
       setBlogs(blogs.concat(createdBlog));
       addNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`);
+      return true;
     } catch (e) {
       addNotification('fields should not be empty', true);
+      return false;
     }
   };
 
@@ -83,6 +85,17 @@ const App = () => {
       setBlogs(updatedBlogs);
     } catch (e) {
       addNotification('some error happened on updating blog', true);
+    }
+  };
+
+  const removeBlog = async (blogId) => {
+    try {
+      await blogService.remove(blogId);
+      const updatedBlogs = blogs.filter((blog) => (blog.id === blogId ? false : blog));
+      setBlogs(updatedBlogs);
+      addNotification('blog was successfully deleted');
+    } catch (e) {
+      addNotification('could not delete this blog', true);
     }
   };
 
@@ -109,7 +122,13 @@ const App = () => {
           {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+              <Blog
+                key={blog.id}
+                blog={blog}
+                updateBlog={updateBlog}
+                removeBlog={removeBlog}
+                username={user.username}
+              />
             ))}
         </div>
       )}
