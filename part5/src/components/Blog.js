@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const Blog = ({ blog, updateBlog, removeBlog, username }) => {
   const [visible, setVisible] = useState(false);
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,6 +11,7 @@ const Blog = ({ blog, updateBlog, removeBlog, username }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
+
   const deleteButtonStyle = {
     backgroundColor: 'blue',
     borderRadius: '5px',
@@ -22,7 +25,9 @@ const Blog = ({ blog, updateBlog, removeBlog, username }) => {
   };
 
   const deleteBlog = () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) removeBlog(blog.id);
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      removeBlog(blog.id);
+    }
   };
 
   return (
@@ -47,6 +52,13 @@ const Blog = ({ blog, updateBlog, removeBlog, username }) => {
       )}
     </div>
   );
+};
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  updateBlog: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default Blog;

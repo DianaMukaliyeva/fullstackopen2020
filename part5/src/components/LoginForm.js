@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const LoginForm = ({ handleLogin }) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const onSubmit = async (e) => {
-    e.preventDefault()
-    handleLogin(username, password)
-  }
+    e.preventDefault();
+    handleLogin(username, password);
+  };
 
   return (
     <form onSubmit={onSubmit}>
@@ -32,11 +32,11 @@ const LoginForm = ({ handleLogin }) => {
       </div>
       <button type="submit">login</button>
     </form>
-  )
-}
+  );
+};
 
 LoginForm.propTypes = {
   handleLogin: PropTypes.func.isRequired,
-}
+};
 
-export default LoginForm
+export default LoginForm;
