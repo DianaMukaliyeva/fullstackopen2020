@@ -4,10 +4,17 @@ const user = {
   password: 'test',
 };
 
+const user2 = {
+  name: 'Test User2',
+  username: 'test2',
+  password: 'test2',
+};
+
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset');
     cy.request('POST', 'http://localhost:3001/api/users/', user);
+    cy.request('POST', 'http://localhost:3001/api/users/', user2);
     cy.visit('http://localhost:3000');
   });
 
@@ -88,6 +95,22 @@ describe('Blog app', function () {
         cy.get('@theFirstBlog').contains('likes 0');
         cy.get('@theFirstBlog').contains('like').click();
         cy.get('@theFirstBlog').contains('likes 1');
+      });
+
+      it('user created a blog can delete it', function () {
+        cy.contains('first title first author').parent().as('theFirstBlog');
+        cy.get('@theFirstBlog').find('button').click();
+        cy.get('@theFirstBlog').contains('remove').click();
+        cy.get('html').should('not.contain', 'first title first author');
+      });
+
+      it("user can not delete other user's blog", function () {
+        cy.contains('logout').click();
+        cy.login({ username: 'test2', password: 'test2' });
+        cy.contains('first title first author').parent().as('theFirstBlog');
+        cy.get('@theFirstBlog').find('button').click();
+        cy.get('@theFirstBlog').contains('likes 0');
+        cy.get('@theFirstBlog').should('not.contain', 'remove');
       });
     });
   });
