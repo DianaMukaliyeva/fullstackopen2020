@@ -44,4 +44,14 @@ describe('<Blog />', () => {
     expect(div).toHaveTextContent(`likes ${blog.likes}`);
     expect(div).toHaveTextContent(blog.url);
   });
+
+  test('after clicking twice on like button event is called twice', () => {
+    const button = component.getByText('view');
+    fireEvent.click(button);
+
+    const likeButton = component.container.querySelector('.like-button');
+    fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
+    expect(mockUpdate.mock.calls).toHaveLength(2);
+  });
 });
