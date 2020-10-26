@@ -68,10 +68,26 @@ describe('Blog app', function () {
         cy.get('html').should('not.contain', 'first url');
       });
 
-      it.only('shows url and likes on button view click', function () {
+      it('shows url and likes on button view click', function () {
         cy.contains('first title first author').parent().find('button').click();
         cy.contains('first url');
         cy.contains('likes 0');
+      });
+
+      it('hide url and likes on button hide click', function () {
+        cy.contains('first title first author').parent().find('button').as('theButton');
+        cy.get('@theButton').click();
+        cy.get('html').should('contain', 'first url');
+        cy.get('@theButton').click();
+        cy.get('html').should('not.contain', 'first url');
+      });
+
+      it('like blog add likes to a blog', function () {
+        cy.contains('first title first author').parent().as('theFirstBlog');
+        cy.get('@theFirstBlog').find('button').click();
+        cy.get('@theFirstBlog').contains('likes 0');
+        cy.get('@theFirstBlog').contains('like').click();
+        cy.get('@theFirstBlog').contains('likes 1');
       });
     });
   });
