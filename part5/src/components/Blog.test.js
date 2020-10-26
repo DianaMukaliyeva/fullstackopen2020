@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Blog from './Blog';
 
 describe('<Blog />', () => {
@@ -29,14 +29,19 @@ describe('<Blog />', () => {
   });
 
   test('at start renders content of title and author, but not likes and url', () => {
-    const component = render(
-      <Blog blog={blog} updateBlog={mockUpdate} removeBlog={mockRemove} username={username} />
-    );
-
     const div = component.container.querySelector('.blog');
 
-    expect(div).toHaveTextContent('Test title Test author');
-    expect(div).not.toHaveTextContent('likes');
-    expect(div).not.toHaveTextContent('Test url');
+    expect(div).toHaveTextContent(`${blog.title} ${blog.author}`);
+    expect(div).not.toHaveTextContent(`likes ${blog.likes}`);
+    expect(div).not.toHaveTextContent(blog.url);
+  });
+
+  test('after clicking the button, likes and url are shown', () => {
+    const button = component.getByText('view');
+    fireEvent.click(button);
+
+    const div = component.container.querySelector('.blog');
+    expect(div).toHaveTextContent(`likes ${blog.likes}`);
+    expect(div).toHaveTextContent(blog.url);
   });
 });
