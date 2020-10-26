@@ -40,4 +40,39 @@ describe('Blog app', function () {
       cy.get('html').should('not.contain', 'Test User logged in');
     });
   });
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: 'test', password: 'test' });
+    });
+
+    it('a new blog can be created', function () {
+      cy.contains('create new blog').click();
+      cy.get('input[name="title"]').type('new title blog');
+      cy.get('input[name="author"]').type('new author');
+      cy.get('input[name="url"]').type('new url');
+      cy.get('#createBlog').click();
+
+      cy.contains('new title blog new author');
+    });
+
+    describe('operation with blogs', function () {
+      beforeEach(function () {
+        cy.createBlog({ author: 'first author', title: 'first title', url: 'first url' });
+        cy.createBlog({ author: 'second author', title: 'second title', url: 'second url' });
+        cy.createBlog({ author: 'third author', title: 'third title', url: 'third url' });
+      });
+
+      it('shows only title and author, not url and likes', function () {
+        cy.contains('first title first author');
+        cy.get('html').should('not.contain', 'first url');
+      });
+
+      it.only('shows url and likes on button view click', function () {
+        cy.contains('first title first author').parent().find('button').click();
+        cy.contains('first url');
+        cy.contains('likes 0');
+      });
+    });
+  });
 });
