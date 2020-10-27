@@ -113,5 +113,48 @@ describe('Blog app', function () {
         cy.get('@theFirstBlog').should('not.contain', 'remove');
       });
     });
+
+    describe('blogs are ordered by more likes', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          author: 'first author',
+          title: 'first title',
+          url: 'some url',
+          likes: 10,
+        });
+        cy.createBlog({
+          author: 'second author',
+          title: 'second title',
+          url: 'second url',
+          likes: 12,
+        });
+        cy.createBlog({ author: 'third author', title: 'third title', url: 'third url', likes: 9 });
+      });
+
+      it('blogs are ordered correctly', function () {
+        cy.get('.blog').then((blog) => {
+          expect(blog[0]).contain('second title');
+          expect(blog[1]).contain('first title');
+          expect(blog[2]).to.contain('third title');
+        });
+      });
+
+      it('blogs are reordered if user likes', function () {
+        cy.contains('third title third author').parent().as('theThirdBlog');
+        cy.get('@theThirdBlog').find('button').click();
+        cy.get('@theThirdBlog').contains('likes 9');
+        cy.get('@theThirdBlog').contains('like').click();
+        cy.get('@theThirdBlog').contains('like').click();
+        cy.get('@theThirdBlog').contains('like').click();
+        cy.get('@theThirdBlog').contains('like').click();
+        cy.get('@theThirdBlog').contains('likes 13');
+
+        cy.get('.blog').then((blog) => {
+          expect(blog[0]).contain('third title');
+          expect(blog[1]).contain('second title');
+          expect(blog[2]).to.contain('first title');
+        });
+      });
+    });
   });
 });
