@@ -36,11 +36,12 @@ export const addVote = (id) => {
   };
 };
 
-export const createAnecdote = (data) => {
-  return {
+export const createAnecdote = (content) => async (dispatch) => {
+  const newAnecdote = await anecdoteService.createNew(content);
+  dispatch({
     type: 'NEW_ANECDOTE',
-    data,
-  };
+    data: newAnecdote,
+  });
 };
 
 export default anecdoteReducer;
