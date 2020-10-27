@@ -20,7 +20,10 @@ const Blogs = ({ addNotification, user, setUser }) => {
       setBlogs(blogs.concat(createdBlog));
       addNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`);
     } catch (e) {
-      addNotification('fields should not be empty', true);
+      addNotification(
+        'Could not create note, check fields or check if right user is logged in',
+        true
+      );
     }
   };
 
