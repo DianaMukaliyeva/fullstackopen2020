@@ -37,8 +37,8 @@ const Blog = ({ user, blog }) => {
       <div>
         likes {blog.likes} <button onClick={likeBlog}>like</button>
       </div>
-      added by {blog.user.name ? blog.user.name : blog.user.username}
-      {user && blog.user.username === user.username && (
+      added by {blog.user && blog.user.name ? blog.user.name : 'anonym'}
+      {user && blog.user && blog.user.username === user.username && (
         <button style={deleteButtonStyle} onClick={deleteBlog}>
           remove
         </button>

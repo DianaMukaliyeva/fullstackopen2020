@@ -28,7 +28,10 @@ export const getBlogs = () => async (dispatch) => {
       data: blogs,
     });
   } catch (e) {
-    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    const msg =
+      e.response && e.response.data && e.response.data.error
+        ? e.response.data.error
+        : 'something went wrong';
     dispatch(setNotification(msg, true));
   }
 };
@@ -43,7 +46,10 @@ export const createBlog = (newBlog, resetForm) => async (dispatch) => {
     resetForm();
     dispatch(setNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`));
   } catch (e) {
-    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    const msg =
+      e.response && e.response.data && e.response.data.error
+        ? e.response.data.error
+        : 'something went wrong';
     dispatch(setNotification(msg, true));
   }
 };
@@ -57,7 +63,10 @@ export const removeBlog = (blogId) => async (dispatch) => {
     });
     dispatch(setNotification('blog was successfully deleted'));
   } catch (e) {
-    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    const msg =
+      e.response && e.response.data && e.response.data.error
+        ? e.response.data.error
+        : 'something went wrong';
     dispatch(setNotification(msg, true));
   }
 };
@@ -73,7 +82,10 @@ export const addComment = (comment, blog) => async (dispatch) => {
     });
     dispatch(setNotification('comment was successfully added'));
   } catch (e) {
-    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    const msg =
+      e.response && e.response.data && e.response.data.error
+        ? e.response.data.error
+        : 'something went wrong';
     dispatch(setNotification(msg, true));
   }
 };
@@ -87,7 +99,10 @@ export const updateBlog = (blogToUpdate) => async (dispatch) => {
     });
     dispatch(setNotification(`you liked blog ${updatedBlog.title} by ${updatedBlog.author}`));
   } catch (e) {
-    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    const msg =
+      e.response && e.response.data && e.response.data.error
+        ? e.response.data.error
+        : 'something went wrong';
     dispatch(setNotification(msg, true));
   }
 };

@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { useField } from '../hooks';
 import { createBlog } from '../reducers/blogReducer';
 
 const BlogForm = ({ hideForm }) => {
   const dispatch = useDispatch();
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' });
-
-  const handleBlogChange = (event) => {
-    setNewBlog({ ...newBlog, [event.target.name]: event.target.value });
-  };
+  const title = useField('text', 'title');
+  const author = useField('text', 'author');
+  const url = useField('text', 'url');
 
   const resetForm = () => {
     hideForm();
-    setNewBlog({ title: '', author: '', url: '' });
+    title.onReset();
+    author.onReset();
+    url.onReset();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const newBlog = {
+      title: title.value,
+      author: author.value,
+      url: url.value,
+    };
     dispatch(createBlog(newBlog, resetForm));
   };
 
@@ -25,13 +31,13 @@ const BlogForm = ({ hideForm }) => {
     <form onSubmit={handleSubmit}>
       <h2>create new</h2>
       <div>
-        title: <input name="title" value={newBlog.title} onChange={handleBlogChange} />
+        title: <input {...title} />
       </div>
       <div>
-        author: <input name="author" value={newBlog.author} onChange={handleBlogChange} />
+        author: <input {...author} />
       </div>
       <div>
-        url: <input name="url" value={newBlog.url} onChange={handleBlogChange} />
+        url: <input {...url} />
       </div>
       <button id="createBlog" type="submit">
         create

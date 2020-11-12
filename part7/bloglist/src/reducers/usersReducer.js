@@ -22,7 +22,10 @@ export const getUsers = () => async (dispatch) => {
       data: users,
     });
   } catch (e) {
-    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    const msg =
+      e.response && e.response.data && e.response.data.error
+        ? e.response.data.error
+        : 'something went wrong';
     dispatch(setNotification(msg, true));
   }
 };

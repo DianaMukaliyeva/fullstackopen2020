@@ -28,7 +28,10 @@ export const login = (data) => async (dispatch) => {
     });
     blogService.setToken(user.token);
   } catch (e) {
-    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    const msg =
+      e.response && e.response.data && e.response.data.error
+        ? e.response.data.error
+        : 'something went wrong';
     dispatch(setNotification(msg, true));
   }
 };
