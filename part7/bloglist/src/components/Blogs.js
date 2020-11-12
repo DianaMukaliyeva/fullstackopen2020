@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { setNotification } from '../reducers/notificationReducer';
 import Blog from './Blog';
 import BlogForm from './BlogForm';
 import Togglable from './Togglable';
 import blogService from '../services/blogs';
 
-const Blogs = ({ addNotification, user, setUser }) => {
+const Blogs = ({ user, setUser }) => {
+  const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
   const blogFormRef = useRef();
 
@@ -18,11 +21,13 @@ const Blogs = ({ addNotification, user, setUser }) => {
       blogFormRef.current.toggleVisibility();
       const createdBlog = await blogService.create(newBlog);
       setBlogs(blogs.concat(createdBlog));
-      addNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`);
+      dispatch(setNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`));
     } catch (e) {
-      addNotification(
-        'Could not create note, check fields or check if right user is logged in',
-        true
+      dispatch(
+        setNotification(
+          'Could not create note, check fields or check if right user is logged in',
+          true
+        )
       );
     }
   };
@@ -35,7 +40,7 @@ const Blogs = ({ addNotification, user, setUser }) => {
       );
       setBlogs(updatedBlogs);
     } catch (e) {
-      addNotification('some error happened on updating blog', true);
+      dispatch(setNotification('some error happened on updating blog', true));
     }
   };
 
@@ -44,9 +49,9 @@ const Blogs = ({ addNotification, user, setUser }) => {
       await blogService.remove(blogId);
       const updatedBlogs = blogs.filter((blog) => (blog.id === blogId ? false : blog));
       setBlogs(updatedBlogs);
-      addNotification('blog was successfully deleted');
+      dispatch(setNotification('blog was successfully deleted'));
     } catch (e) {
-      addNotification('could not delete this blog', true);
+      dispatch(setNotification('could not delete this blog', true));
     }
   };
 
@@ -79,7 +84,6 @@ const Blogs = ({ addNotification, user, setUser }) => {
 };
 
 Blogs.propTypes = {
-  addNotification: PropTypes.func.isRequired,
   setUser: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };

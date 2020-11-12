@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setNotification } from './reducers/notificationReducer';
 import Blogs from './components/Blogs';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
@@ -6,16 +8,8 @@ import blogService from './services/blogs';
 import loginService from './services/login';
 
 const App = () => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setMessage(null);
-      setError(null);
-    }, 5000);
-  }, [message]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser');
@@ -25,11 +19,6 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
-
-  const addNotification = (message, error) => {
-    setError(error);
-    setMessage(message);
-  };
 
   const handleLogin = async (username, password) => {
     try {
@@ -42,18 +31,18 @@ const App = () => {
       blogService.setToken(user.token);
       setUser(user);
     } catch (exception) {
-      addNotification('wrong username or password', true);
+      dispatch(setNotification('wrong username or password', true));
     }
   };
 
   return (
     <div>
       <h2>{user === null ? 'Log in to application' : 'blogs'}</h2>
-      <Notification message={message} error={error} />
+      <Notification />
       {user === null ? (
         <LoginForm handleLogin={handleLogin} />
       ) : (
-        <Blogs user={user} setUser={setUser} addNotification={addNotification} />
+        <Blogs user={user} setUser={setUser} />
       )}
     </div>
   );
