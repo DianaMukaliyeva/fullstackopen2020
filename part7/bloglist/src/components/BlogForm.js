@@ -11,11 +11,14 @@ const BlogForm = ({ hideForm }) => {
     setNewBlog({ ...newBlog, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(createBlog(newBlog));
+  const resetForm = () => {
     hideForm();
     setNewBlog({ title: '', author: '', url: '' });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createBlog(newBlog, resetForm));
   };
 
   return (

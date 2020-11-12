@@ -33,13 +33,14 @@ export const getBlogs = () => async (dispatch) => {
   }
 };
 
-export const createBlog = (newBlog) => async (dispatch) => {
+export const createBlog = (newBlog, resetForm) => async (dispatch) => {
   try {
     const createdBlog = await blogService.create(newBlog);
     dispatch({
       type: 'CREATE_BLOG',
       data: createdBlog,
     });
+    resetForm();
     dispatch(setNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`));
   } catch (e) {
     const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
