@@ -4,22 +4,26 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { getUsers } from './reducers/usersReducer';
 import { initUser } from './reducers/userReducer';
 import Blogs from './components/Blogs';
+import Blog from './components/Blog';
 import Users from './components/Users';
 import User from './components/User';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 import { logoutUser } from './reducers/userReducer';
+import { getBlogs } from './reducers/blogReducer';
 
 const App = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const users = useSelector((state) => state.users);
-  const match = useRouteMatch('/users/:id');
-  const userInfo = match ? users.find((u) => u.id === match.params.id) : null;
+  const { user, users, blogs } = useSelector((state) => state);
+  const userMatch = useRouteMatch('/users/:id');
+  const blogMatch = useRouteMatch('/blogs/:id');
+  const userInfo = userMatch ? users.find((u) => u.id === userMatch.params.id) : null;
+  const blog = blogMatch ? blogs.find((blog) => blog.id === blogMatch.params.id) : null;
 
   useEffect(() => {
     dispatch(initUser());
     dispatch(getUsers());
+    dispatch(getBlogs());
   }, [dispatch]);
 
   const logout = () => {
@@ -46,8 +50,11 @@ const App = () => {
             <Route path="/users">
               <Users users={users} />
             </Route>
+            <Route path="/blogs/:id">
+              <Blog user={user} blog={blog} />
+            </Route>
             <Route path="/">
-              <Blogs />
+              <Blogs blogs={blogs} />
             </Route>
           </Switch>
         </>

@@ -1,19 +1,9 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { removeBlog, updateBlog } from '../reducers/blogReducer';
 
-const Blog = ({ blog, username }) => {
+const Blog = ({ user, blog }) => {
   const dispatch = useDispatch();
-  const [visible, setVisible] = useState(false);
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  };
 
   const deleteButtonStyle = {
     backgroundColor: 'blue',
@@ -35,33 +25,25 @@ const Blog = ({ blog, username }) => {
     }
   };
 
+  if (!blog) return null;
+
   return (
-    <div style={blogStyle} className="blog">
-      <div>
+    <div>
+      <h2>
         {blog.title} {blog.author}
-        <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
+      </h2>
+      <a href={blog.url}>{blog.url}</a>
+      <div>
+        likes {blog.likes} <button onClick={likeBlog}>like</button>
       </div>
-      {visible && (
-        <>
-          <div>{blog.url}</div>
-          <div>
-            likes {blog.likes} <button onClick={likeBlog}>like</button>
-          </div>
-          {blog.user && <div>{blog.user.name}</div>}
-          {blog.user && blog.user.username === username && (
-            <button style={deleteButtonStyle} onClick={deleteBlog}>
-              remove
-            </button>
-          )}
-        </>
+      added by {blog.user.name ? blog.user.name : blog.user.username}
+      {user && blog.user.username === user.username && (
+        <button style={deleteButtonStyle} onClick={deleteBlog}>
+          remove
+        </button>
       )}
     </div>
   );
-};
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 export default Blog;
