@@ -9,7 +9,7 @@ import Users from './components/Users';
 import User from './components/User';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
-import { logoutUser } from './reducers/userReducer';
+import Navigation from './components/Navigation';
 import { getBlogs } from './reducers/blogReducer';
 
 const App = () => {
@@ -26,38 +26,28 @@ const App = () => {
     dispatch(getBlogs());
   }, [dispatch]);
 
-  const logout = () => {
-    window.localStorage.removeItem('loggedUser');
-    dispatch(logoutUser());
-  };
-
   return (
     <div>
-      <h2>{user === null ? 'Log in to application' : 'blogs'}</h2>
+      <Navigation user={user} />
+      <h2>{user === null ? 'Log in to application' : 'blog app'}</h2>
       <Notification />
       {user === null ? (
         <LoginForm />
       ) : (
-        <>
-          <p>{user.name} logged in</p>
-          <p>
-            <button onClick={logout}>logout</button>
-          </p>
-          <Switch>
-            <Route path="/users/:id">
-              <User user={userInfo} />
-            </Route>
-            <Route path="/users">
-              <Users users={users} />
-            </Route>
-            <Route path="/blogs/:id">
-              <Blog user={user} blog={blog} />
-            </Route>
-            <Route path="/">
-              <Blogs blogs={blogs} />
-            </Route>
-          </Switch>
-        </>
+        <Switch>
+          <Route path="/users/:id">
+            <User user={userInfo} />
+          </Route>
+          <Route path="/users">
+            <Users users={users} />
+          </Route>
+          <Route path="/blogs/:id">
+            <Blog user={user} blog={blog} />
+          </Route>
+          <Route path="/">
+            <Blogs blogs={blogs} />
+          </Route>
+        </Switch>
       )}
     </div>
   );
