@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../reducers/notificationReducer';
 import { getBlogs } from '../reducers/blogReducer';
 import Blog from './Blog';
 import BlogForm from './BlogForm';
 import Togglable from './Togglable';
-import blogService from '../services/blogs';
 
 const Blogs = ({ user, setUser }) => {
   const dispatch = useDispatch();
@@ -19,28 +17,6 @@ const Blogs = ({ user, setUser }) => {
 
   const toggleVisibility = () => {
     blogFormRef.current.toggleVisibility();
-  };
-
-  const updateBlog = async (blogToUpdate) => {
-    try {
-      await blogService.update(blogToUpdate);
-      const updatedBlogs = blogs.map((blog) =>
-        blog.id === blogToUpdate.id ? { ...blogToUpdate } : blog
-      );
-    } catch (e) {
-      dispatch(setNotification('some error happened on updating blog', true));
-    }
-  };
-
-  const removeBlog = async (blogId) => {
-    try {
-      await blogService.remove(blogId);
-      const updatedBlogs = blogs.filter((blog) => (blog.id === blogId ? false : blog));
-      //   setBlogs(updatedBlogs);
-      dispatch(setNotification('blog was successfully deleted'));
-    } catch (e) {
-      dispatch(setNotification('could not delete this blog', true));
-    }
   };
 
   const logout = () => {
@@ -59,13 +35,7 @@ const Blogs = ({ user, setUser }) => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlog={updateBlog}
-            removeBlog={removeBlog}
-            username={user.username}
-          />
+          <Blog key={blog.id} blog={blog} username={user.username} />
         ))}
     </div>
   );
