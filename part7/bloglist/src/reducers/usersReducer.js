@@ -22,7 +22,8 @@ export const getUsers = () => async (dispatch) => {
       data: users,
     });
   } catch (e) {
-    dispatch(setNotification('Could not get users, check if server is running', true));
+    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    dispatch(setNotification(msg, true));
   }
 };
 

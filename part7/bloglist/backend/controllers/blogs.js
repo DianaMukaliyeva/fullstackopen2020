@@ -27,9 +27,14 @@ blogsRouter.post('/', async (request, response) => {
 });
 
 blogsRouter.post('/:id/comments', async (request, response) => {
-  const token = request.token;
   const comment = request.body.comment;
+  const token = request.token;
   const decoded = jwt.verify(token, process.env.SECRET);
+  const user = await User.findById(decoded.id);
+
+  if (!comment) {
+    return response.status(400).json({ error: 'comment is missing' });
+  }
 
   if (!token || !decoded.id || !user) {
     return response.status(401).json({ error: 'token missing or invalid' });
@@ -38,7 +43,6 @@ blogsRouter.post('/:id/comments', async (request, response) => {
   const blog = await Blog.findById(request.params.id);
   blog.comments = blog.comments.concat(comment);
   const result = await blog.save();
-  console.log(result);
   response.json(result);
 });
 

@@ -28,7 +28,8 @@ export const getBlogs = () => async (dispatch) => {
       data: blogs,
     });
   } catch (e) {
-    dispatch(setNotification('Could not get blogs, check if server is running', true));
+    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    dispatch(setNotification(msg, true));
   }
 };
 
@@ -41,7 +42,8 @@ export const createBlog = (newBlog) => async (dispatch) => {
     });
     dispatch(setNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`));
   } catch (e) {
-    dispatch(setNotification('Could not create blog, check fields', true));
+    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    dispatch(setNotification(msg, true));
   }
 };
 
@@ -54,7 +56,24 @@ export const removeBlog = (blogId) => async (dispatch) => {
     });
     dispatch(setNotification('blog was successfully deleted'));
   } catch (e) {
-    dispatch(setNotification('could not delete this blog', true));
+    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    dispatch(setNotification(msg, true));
+  }
+};
+
+export const addComment = (comment, blog) => async (dispatch) => {
+  try {
+    await blogService.comment(comment, blog.id);
+    const updatedBlog = { ...blog };
+    updatedBlog.comments = blog.comments.concat(comment);
+    dispatch({
+      type: 'UPDATE_BLOG',
+      data: updatedBlog,
+    });
+    dispatch(setNotification('comment was successfully added'));
+  } catch (e) {
+    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    dispatch(setNotification(msg, true));
   }
 };
 
@@ -67,7 +86,8 @@ export const updateBlog = (blogToUpdate) => async (dispatch) => {
     });
     dispatch(setNotification(`you liked blog ${updatedBlog.title} by ${updatedBlog.author}`));
   } catch (e) {
-    dispatch(setNotification('some error happened on updating blog', true));
+    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    dispatch(setNotification(msg, true));
   }
 };
 

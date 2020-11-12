@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { removeBlog, updateBlog } from '../reducers/blogReducer';
+import { addComment } from '../reducers/blogReducer';
 
 const Blog = ({ user, blog }) => {
   const dispatch = useDispatch();
+  const [comment, setComment] = useState('');
 
   const deleteButtonStyle = {
     backgroundColor: 'blue',
@@ -25,6 +27,15 @@ const Blog = ({ user, blog }) => {
     }
   };
 
+  const handleChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addComment(comment, blog));
+  };
+
   if (!blog) return null;
 
   return (
@@ -43,6 +54,10 @@ const Blog = ({ user, blog }) => {
         </button>
       )}
       <h3>comments</h3>
+      <form onSubmit={handleSubmit}>
+        <input name="comment" value={comment} onChange={handleChange}></input>
+        <button>add comment</button>
+      </form>
       <ul>
         {blog.comments.map((comment, index) => (
           <li key={index}>{comment}</li>

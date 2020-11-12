@@ -28,7 +28,8 @@ export const login = (data) => async (dispatch) => {
     });
     blogService.setToken(user.token);
   } catch (e) {
-    dispatch(setNotification('wrong username or password', true));
+    const msg = e.response.data.error ? e.response.data.error : 'something went wrong';
+    dispatch(setNotification(msg, true));
   }
 };
 
