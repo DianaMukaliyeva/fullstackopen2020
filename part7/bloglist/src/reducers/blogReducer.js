@@ -63,7 +63,7 @@ export const updateBlog = (blogToUpdate) => async (dispatch) => {
     const updatedBlog = await blogService.update(blogToUpdate);
     dispatch({
       type: 'UPDATE_BLOG',
-      data: updatedBlog,
+      data: blogToUpdate,
     });
     dispatch(setNotification(`you liked blog ${updatedBlog.title} by ${updatedBlog.author}`));
   } catch (e) {

@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogs } from '../reducers/blogReducer';
+import { logoutUser } from '../reducers/userReducer';
 import Blog from './Blog';
 import BlogForm from './BlogForm';
 import Togglable from './Togglable';
 
-const Blogs = ({ user, setUser }) => {
+const Blogs = () => {
   const dispatch = useDispatch();
-  const blogs = useSelector((state) => state.blogs);
+  const { blogs, user } = useSelector((state) => state);
   const blogFormRef = useRef();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const Blogs = ({ user, setUser }) => {
 
   const logout = () => {
     window.localStorage.removeItem('loggedUser');
-    setUser(null);
+    dispatch(logoutUser());
   };
 
   return (
@@ -39,11 +39,6 @@ const Blogs = ({ user, setUser }) => {
         ))}
     </div>
   );
-};
-
-Blogs.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
 };
 
 export default Blogs;
