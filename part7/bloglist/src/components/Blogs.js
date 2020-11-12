@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../reducers/notificationReducer';
+import { getBlogs } from '../reducers/blogReducer';
 import Blog from './Blog';
 import BlogForm from './BlogForm';
 import Togglable from './Togglable';
@@ -9,27 +10,15 @@ import blogService from '../services/blogs';
 
 const Blogs = ({ user, setUser }) => {
   const dispatch = useDispatch();
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector((state) => state.blogs);
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    dispatch(getBlogs());
+  }, [blogs, dispatch]);
 
-  const addBlog = async (newBlog) => {
-    try {
-      blogFormRef.current.toggleVisibility();
-      const createdBlog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(createdBlog));
-      dispatch(setNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`));
-    } catch (e) {
-      dispatch(
-        setNotification(
-          'Could not create note, check fields or check if right user is logged in',
-          true
-        )
-      );
-    }
+  const toggleVisibility = () => {
+    blogFormRef.current.toggleVisibility();
   };
 
   const updateBlog = async (blogToUpdate) => {
@@ -38,7 +27,6 @@ const Blogs = ({ user, setUser }) => {
       const updatedBlogs = blogs.map((blog) =>
         blog.id === blogToUpdate.id ? { ...blogToUpdate } : blog
       );
-      setBlogs(updatedBlogs);
     } catch (e) {
       dispatch(setNotification('some error happened on updating blog', true));
     }
@@ -48,7 +36,7 @@ const Blogs = ({ user, setUser }) => {
     try {
       await blogService.remove(blogId);
       const updatedBlogs = blogs.filter((blog) => (blog.id === blogId ? false : blog));
-      setBlogs(updatedBlogs);
+      //   setBlogs(updatedBlogs);
       dispatch(setNotification('blog was successfully deleted'));
     } catch (e) {
       dispatch(setNotification('could not delete this blog', true));
@@ -66,7 +54,7 @@ const Blogs = ({ user, setUser }) => {
         {user.name} logged in <button onClick={logout}>logout</button>
       </p>
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm addBlog={addBlog} />
+        <BlogForm hideForm={toggleVisibility} />
       </Togglable>
       {blogs
         .sort((a, b) => b.likes - a.likes)

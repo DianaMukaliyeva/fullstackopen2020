@@ -1,11 +1,11 @@
 const initialState = { message: '', error: false, id: 0 };
 
 const notificationReducer = (state = initialState, action) => {
-  const payload = action.data;
+  const { data, type } = action;
 
-  switch (action.type) {
+  switch (type) {
     case 'SET_NOTIFICATION':
-      return { error: payload.error, message: payload.message, id: payload.id };
+      return { error: data.error, message: data.message, id: data.id };
     case 'CLEAR_NOTIFICATION':
       return { ...state, message: '' };
     default:
