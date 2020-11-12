@@ -15,7 +15,7 @@ const Blogs = ({ user, setUser }) => {
 
   useEffect(() => {
     dispatch(getBlogs());
-  }, [blogs, dispatch]);
+  }, [dispatch]);
 
   const toggleVisibility = () => {
     blogFormRef.current.toggleVisibility();

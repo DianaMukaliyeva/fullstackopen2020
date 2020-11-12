@@ -32,7 +32,7 @@ export const createBlog = (newBlog) => async (dispatch) => {
   try {
     const createdBlog = await blogService.create(newBlog);
     dispatch({
-      type: 'CREATE_BLOGS',
+      type: 'CREATE_BLOG',
       data: createdBlog,
     });
     dispatch(setNotification(`a new blog "${createdBlog.title}" by ${createdBlog.author} added`));
