@@ -9,7 +9,11 @@ const Notification = () => {
     return null;
   }
 
-  return <Alert variant={error ? 'danger' : 'success'}>{message}</Alert>;
+  return (
+    <Alert className="mt-2" variant={error ? 'danger' : 'success'}>
+      {message}
+    </Alert>
+  );
 };
 
 export default Notification;

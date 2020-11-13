@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormGroup, Button } from 'react-bootstrap';
 import { useField } from '../hooks';
 import { useDispatch } from 'react-redux';
 import { addComment } from '../reducers/blogReducer';
@@ -15,7 +16,7 @@ const Comments = ({ blog }) => {
 
   return (
     <>
-      <h3>comments</h3>
+      <h3>Comments</h3>
       <form onSubmit={handleSubmit}>
         <input {...comment}></input>
         <button>add comment</button>

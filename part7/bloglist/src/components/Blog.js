@@ -1,15 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { Container, Button } from 'react-bootstrap';
 import { removeBlog, updateBlog } from '../reducers/blogReducer';
 import Comments from './Comments';
 
 const Blog = ({ user, blog }) => {
   const dispatch = useDispatch();
-
-  const deleteButtonStyle = {
-    backgroundColor: 'blue',
-    borderRadius: '5px',
-  };
 
   const likeBlog = () => {
     dispatch(
@@ -30,19 +26,24 @@ const Blog = ({ user, blog }) => {
 
   return (
     <div>
-      <h2>
-        {blog.title} {blog.author}
+      <h2 className="text-center pt-3">
+        "{blog.title}" by {blog.author}
       </h2>
-      <a href={blog.url}>{blog.url}</a>
-      <div>
-        likes {blog.likes} <button onClick={likeBlog}>like</button>
-      </div>
-      added by {blog.user && blog.user.name ? blog.user.name : 'anonym'}
-      {user && blog.user && blog.user.username === user.username && (
-        <button style={deleteButtonStyle} onClick={deleteBlog}>
-          remove
-        </button>
-      )}
+      <Container className="p-5">
+        <a href={blog.url}>{blog.url}</a>
+        <div>
+          Likes {blog.likes}{' '}
+          <Button variant="success" className="ml-2 py-1" onClick={likeBlog}>
+            Like
+          </Button>
+        </div>
+        Added by {blog.user && blog.user.name ? blog.user.name : 'anonym'}
+        {user && blog.user && blog.user.username === user.username && (
+          <Button className="ml-3 p-1" variant="outline-secondary" onClick={deleteBlog}>
+            Remove
+          </Button>
+        )}
+      </Container>
       <Comments blog={blog} />
     </div>
   );
