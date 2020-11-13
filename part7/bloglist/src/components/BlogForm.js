@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useField } from '../hooks';
 import { createBlog } from '../reducers/blogReducer';
 
@@ -28,21 +29,36 @@ const BlogForm = ({ hideForm }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>create new</h2>
-      <div>
-        title: <input {...title} />
-      </div>
-      <div>
-        author: <input {...author} />
-      </div>
-      <div>
-        url: <input {...url} />
-      </div>
-      <button id="createBlog" type="submit">
-        create
-      </button>
-    </form>
+    <Form onSubmit={handleSubmit}>
+      <h2>Create new blog</h2>
+      <Form.Group as={Row}>
+        <Form.Label column md="1">
+          Title:
+        </Form.Label>
+        <Col lg="3" sm="5">
+          <Form.Control {...title} />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row}>
+        <Form.Label column md="1">
+          Author:
+        </Form.Label>
+        <Col lg="3" sm="5">
+          <Form.Control {...author} />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row}>
+        <Form.Label column md="1">
+          Url:
+        </Form.Label>
+        <Col lg="3" sm="5">
+          <Form.Control {...url} />
+        </Col>
+      </Form.Group>
+      <Button className="my-1" id="createBlog" type="submit">
+        Create
+      </Button>
+    </Form>
   );
 };
 

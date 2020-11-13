@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Container from 'react-bootstrap/Container';
 import { getUsers } from './reducers/usersReducer';
 import { initUser } from './reducers/userReducer';
 import Blogs from './components/Blogs';
@@ -29,26 +31,27 @@ const App = () => {
   return (
     <div>
       <Navigation user={user} />
-      <h2>{user === null ? 'Log in to application' : 'blog app'}</h2>
-      <Notification />
-      {user === null ? (
-        <LoginForm />
-      ) : (
-        <Switch>
-          <Route path="/users/:id">
-            <User user={userInfo} />
-          </Route>
-          <Route path="/users">
-            <Users users={users} />
-          </Route>
-          <Route path="/blogs/:id">
-            <Blog user={user} blog={blog} />
-          </Route>
-          <Route path="/">
-            <Blogs blogs={blogs} />
-          </Route>
-        </Switch>
-      )}
+      <Container>
+        <Notification />
+        {user === null ? (
+          <LoginForm />
+        ) : (
+          <Switch>
+            <Route path="/users/:id">
+              <User user={userInfo} />
+            </Route>
+            <Route path="/users">
+              <Users users={users} />
+            </Route>
+            <Route path="/blogs/:id">
+              <Blog user={user} blog={blog} />
+            </Route>
+            <Route path="/">
+              <Blogs blogs={blogs} />
+            </Route>
+          </Switch>
+        )}
+      </Container>
     </div>
   );
 };
