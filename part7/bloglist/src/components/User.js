@@ -1,17 +1,25 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { ListGroup } from 'react-bootstrap';
 
 const User = ({ user }) => {
   if (!user) return null;
 
   return (
     <div>
-      <h2>{user.name}</h2>
-      <strong>added blogs</strong>
-      <ul>
+      <h2 className="pt-3">{user.name}</h2>
+      <p>
+        <strong>Added blogs:</strong>
+      </p>
+      <ListGroup>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <Link to={`/blogs/${blog.id}`}>
+            <ListGroup.Item variant="info" key={blog.id}>
+              {blog.title}
+            </ListGroup.Item>
+          </Link>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   );
 };

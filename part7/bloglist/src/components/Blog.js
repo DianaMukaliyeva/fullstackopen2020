@@ -43,8 +43,8 @@ const Blog = ({ user, blog }) => {
             Remove
           </Button>
         )}
+        <Comments blog={blog} />
       </Container>
-      <Comments blog={blog} />
     </div>
   );
 };

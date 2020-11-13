@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
 
 const Users = ({ users }) => {
   return (
     <div>
-      <h2>Users</h2>
-      <table>
-        <tbody>
+      <h2 className="text-center py-3">Users</h2>
+      <Table striped bordered hover>
+        <thead>
           <tr>
             <th></th>
             <th>blogs created</th>
           </tr>
+        </thead>
+        <tbody>
           {users.map((user) => (
             <tr key={user.id}>
               <td>
@@ -21,7 +24,7 @@ const Users = ({ users }) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };

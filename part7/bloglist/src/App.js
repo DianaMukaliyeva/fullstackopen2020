@@ -29,7 +29,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className="bg-light">
       <Navigation user={user} />
       <Container>
         <Notification />
