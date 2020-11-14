@@ -18,7 +18,7 @@ Partners and affiliates of the course include Houston Inc, Terveystalo, Elisa, K
 | 3         | Programming a server with NodeJS and Express                 | 22        |
 | 4         | Testing Express servers, user administration                 | 22        |
 | 5         | Testing React apps                                           | 22        |
-| 6         | State management with Redux                                  |           |
+| 6         | State management with Redux                                  | 21        |
 | 7         | React router, custom hooks, styling app with CSS and webpack |           |
 | 8         | GraphQL                                                      |           |
 | 9         | Typescript                                                   |           |
