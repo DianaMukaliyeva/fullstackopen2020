@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import Select from 'react-select';
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries';
@@ -10,11 +10,11 @@ const Authors = ({ show, result, notify }) => {
   const [changeBirthYear, someResult] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
     onError: (error) => {
-      console.log(error);
+      notify(error.message, true);
     },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (someResult.data && someResult.data.editAuthor === null) {
       notify('author not found', true);
     } else if (someResult.data && someResult.data.editAuthor) {
@@ -39,6 +39,10 @@ const Authors = ({ show, result, notify }) => {
 
   const updateBirthYear = (event) => {
     event.preventDefault();
+    if (!selectedOption) {
+      notify('choose author', true);
+      return;
+    }
     changeBirthYear({ variables: { name: selectedOption.label, born: parseInt(year) } });
     setYear('');
     setSelectedOption(null);

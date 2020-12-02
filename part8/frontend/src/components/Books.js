@@ -7,6 +7,7 @@ const Books = ({ show, result }) => {
   if (result.loading) {
     return <div>loading...</div>;
   }
+
   const books = result.data.allBooks;
 
   return (
