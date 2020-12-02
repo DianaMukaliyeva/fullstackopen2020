@@ -135,10 +135,10 @@ const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    allBooks: (root, args) => {
-      let result = books;
+    allBooks: async (root, args) => {
+      let result = await Book.find({}).populate('author');
       if (args.author) {
-        result = result.filter((book) => book.author === args.author);
+        result = result.filter((book) => book.author.name === args.author);
       }
       if (args.genre) {
         result = result.filter((book) => book.genres.includes(args.genre));
@@ -148,26 +148,30 @@ const resolvers = {
     allAuthors: () => Author.find({}),
   },
   Author: {
-    bookCount: (root) => books.filter((book) => book.author === root.name).length,
+    bookCount: async (root) => {
+      let books = await Book.find({}).populate('author');
+      return books.filter((book) => book.author.name === root.name).length;
+    },
   },
   Mutation: {
-    addBook: (root, args) => {
-      if (!authors.find((author) => author.name === args.author)) {
-        authors = authors.concat({ id: uuid(), name: args.author });
+    addBook: async (root, args) => {
+      let author = await Author.findOne({ name: args.author });
+      if (!author) {
+        author = new Author({ name: args.author, id: uuid() });
+        author.save();
       }
-      let book = { ...args, id: uuid() };
-      books = books.concat(book);
+      let book = new Book({ ...args, author: author.id, id: uuid() });
+      book.save();
+      book.author = author;
       return book;
     },
-    editAuthor: (root, args) => {
-      let authorToEdit = authors.find((author) => author.name === args.name);
+    editAuthor: async (root, args) => {
+      let authorToEdit = await Author.findOne({ name: args.name });
       if (!authorToEdit) {
         return null;
       }
       authorToEdit.born = args.setBornTo;
-      authors = authors.map((author) =>
-        author.name === authorToEdit.name ? authorToEdit : author
-      );
+      authorToEdit.save();
       return authorToEdit;
     },
   },
