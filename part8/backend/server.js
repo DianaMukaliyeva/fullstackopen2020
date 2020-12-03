@@ -1,9 +1,11 @@
 const { ApolloServer, UserInputError, gql, AuthenticationError } = require('apollo-server');
 const { v1: uuid } = require('uuid');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const config = require('./utils/config');
 const Book = require('./models/book');
 const Author = require('./models/author');
+const User = require('./models/user');
 
 mongoose
   .connect(config.MONGODB_URI, {
@@ -99,7 +101,7 @@ const resolvers = {
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username });
 
-      if (!user || args.password !== 'secred') {
+      if (!user || args.password !== 'password') {
         throw new UserInputError('wrong credentials');
       }
 
