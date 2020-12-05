@@ -6,7 +6,7 @@ import NewBook from './components/NewBook';
 import Notification from './components/Notification';
 import Recommend from './components/Recommend';
 import LoginForm from './components/LoginForm';
-import { ALL_AUTHORS, LOGIN, BOOK_ADDED } from './queries';
+import { ALL_AUTHORS, LOGIN, BOOK_ADDED, ALL_BOOKS } from './queries';
 
 const App = () => {
   const [page, setPage] = useState('authors');
@@ -29,10 +29,23 @@ const App = () => {
     }
   }, [result.data]); // eslint-disable-line
 
+  const updateCacheWith = (bookAdded) => {
+    const includedIn = (set, object) => set.map((p) => p.id).includes(object.id);
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS });
+    if (!includedIn(dataInStore.allBooks, bookAdded)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: dataInStore.allBooks.concat(bookAdded) },
+      });
+    }
+  };
+
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
       const book = subscriptionData.data.bookAdded;
       alert(`a new book added "${book.title}" by ${book.author.name}`);
+      updateCacheWith(book);
     },
   });
 

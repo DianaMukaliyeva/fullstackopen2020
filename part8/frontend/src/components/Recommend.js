@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useLazyQuery } from '@apollo/client';
-import { ME, ALL_BOOKS } from '../queries';
+import { useQuery, useLazyQuery, useSubscription } from '@apollo/client';
+import { ME, ALL_BOOKS, BOOK_ADDED } from '../queries';
 import BooksTable from './BooksTable';
 
 const Recommend = ({ show, notify }) => {
   const user = useQuery(ME);
   const [favoriteGenre, setFavoriteGenre] = useState('');
   const [books, setBooks] = useState([]);
-  const [getBooks, booksResult] = useLazyQuery(ALL_BOOKS, {
+  const [getBooks] = useLazyQuery(ALL_BOOKS, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data) => setBooks(data.allBooks),
     onError: (error) => {
       notify(error.message, true);
     },
@@ -20,11 +22,16 @@ const Recommend = ({ show, notify }) => {
     }
   }, [user.data, getBooks]);
 
-  useEffect(() => {
-    if (booksResult.data) {
-      setBooks(booksResult.data.allBooks);
-    }
-  }, [favoriteGenre, booksResult]);
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const book = subscriptionData.data.bookAdded;
+      const includedIn = (set, object) => set.map((p) => p.id).includes(object.id);
+
+      if (!includedIn(books, book)) {
+        setBooks([...books, book]);
+      }
+    },
+  });
 
   if (!show) {
     return null;
@@ -38,7 +45,7 @@ const Recommend = ({ show, notify }) => {
     <div>
       <h2>recommendations</h2>
       <p>
-        books in your favorite genre <b>{user.data.me.favoriteGenre}</b>
+        books in your favorite genre <b>{favoriteGenre}</b>
       </p>
       <BooksTable books={books} />
     </div>

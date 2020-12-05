@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries';
+import { ADD_BOOK } from '../queries';
 
 const NewBook = ({ show, notify }) => {
   const [title, setTitle] = useState('');
@@ -8,10 +8,7 @@ const NewBook = ({ show, notify }) => {
   const [published, setPublished] = useState('');
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
-  // when new book is added, all books and all authors are updated
-  const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
-  });
+  const [addBook] = useMutation(ADD_BOOK);
 
   if (!show) {
     return null;
@@ -37,8 +34,10 @@ const NewBook = ({ show, notify }) => {
   };
 
   const addGenre = () => {
-    setGenres(genres.concat(genre));
-    setGenre('');
+    if (genre) {
+      setGenres(genres.concat(genre));
+      setGenre('');
+    }
   };
 
   return (
