@@ -10,17 +10,16 @@ Partners and affiliates of the course include Houston Inc, Terveystalo, Elisa, K
 
 ## Parts and exercises
 
-| Part      | Theme                                                        | Exercises |
-| --------- | ------------------------------------------------------------ | --------- |
-| 0         | Fundamentals of Web apps                                     | 6         |
-| 1         | Introduction to React                                        | 14        |
-| 2         | Communicating with server                                    | 20        |
-| 3         | Programming a server with NodeJS and Express                 | 22        |
-| 4         | Testing Express servers, user administration                 | 22        |
-| 5         | Testing React apps                                           | 22        |
-| 6         | State management with Redux                                  | 21        |
-| 7         | React router, custom hooks, styling app with CSS and webpack |           |
-| 8         | GraphQL                                                      |           |
-| 9         | Typescript                                                   |           |
-| 10        | React Native                                                 |           |
-| **Total** |                                                              |
+| Part | Theme                                                        | Exercises |
+| ---- | ------------------------------------------------------------ | --------- |
+| 0    | Fundamentals of Web apps                                     | 6         |
+| 1    | Introduction to React                                        | 14        |
+| 2    | Communicating with server                                    | 20        |
+| 3    | Programming a server with NodeJS and Express                 | 22        |
+| 4    | Testing Express servers, user administration                 | 22        |
+| 5    | Testing React apps                                           | 22        |
+| 6    | State management with Redux                                  | 21        |
+| 7    | React router, custom hooks, styling app with CSS and webpack | 21        |
+| 8    | GraphQL                                                      | 26        |
+| 9    | Typescript                                                   |           |
+| 10   | React Native                                                 |           |
