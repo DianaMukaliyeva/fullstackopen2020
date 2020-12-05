@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, useApolloClient } from '@apollo/client';
+import { useQuery, useMutation, useApolloClient, useSubscription } from '@apollo/client';
 import Authors from './components/Authors';
 import Books from './components/Books';
 import NewBook from './components/NewBook';
 import Notification from './components/Notification';
 import Recommend from './components/Recommend';
 import LoginForm from './components/LoginForm';
-import { ALL_AUTHORS, LOGIN } from './queries';
+import { ALL_AUTHORS, LOGIN, BOOK_ADDED } from './queries';
 
 const App = () => {
   const [page, setPage] = useState('authors');
@@ -28,6 +28,13 @@ const App = () => {
       setPage('authors');
     }
   }, [result.data]); // eslint-disable-line
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const book = subscriptionData.data.bookAdded;
+      alert(`a new book added "${book.title}" by ${book.author.name}`);
+    },
+  });
 
   const createNotification = (text, error = false) => {
     setMessage({ content: text, error });
