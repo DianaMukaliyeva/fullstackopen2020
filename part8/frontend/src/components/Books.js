@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BooksTable from './BooksTable';
 
 const Books = ({ show, result }) => {
   const [selected, setSelected] = useState('all genres');
@@ -17,36 +18,17 @@ const Books = ({ show, result }) => {
   );
   genres.push('all genres');
 
-  const onChange = (e) => {
-    setSelected(e.target.value);
-  };
-
   return (
     <div>
       <h2>books</h2>
       <p>
         in genre <b>{selected}</b>
       </p>
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books
-            .filter((book) =>
-              selected === 'all genres' ? book : book.genres.includes(selected) ? book : null
-            )
-            .map((a) => (
-              <tr key={a.title}>
-                <td>{a.title}</td>
-                <td>{a.author.name}</td>
-                <td>{a.published}</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <BooksTable
+        books={books.filter((book) =>
+          selected === 'all genres' ? book : book.genres.includes(selected) ? book : null
+        )}
+      />
       {genres.map((genre, index) => (
         <button key={index} onClick={() => setSelected(genre)}>
           {genre}

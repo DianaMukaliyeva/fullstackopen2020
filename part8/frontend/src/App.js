@@ -4,6 +4,7 @@ import Authors from './components/Authors';
 import Books from './components/Books';
 import NewBook from './components/NewBook';
 import Notification from './components/Notification';
+import Recommend from './components/Recommend';
 import LoginForm from './components/LoginForm';
 import { ALL_AUTHORS, ALL_BOOKS, LOGIN } from './queries';
 
@@ -50,21 +51,18 @@ const App = () => {
         {token ? (
           <>
             <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={() => setPage('recommend')}>recommend</button>
             <button onClick={logout}>logout</button>
           </>
         ) : (
           <button onClick={() => setPage('login')}>login</button>
         )}
       </div>
-
       <Notification message={message} />
-
       <LoginForm show={page === 'login'} login={login} />
-
       <Authors show={page === 'authors'} notify={createNotification} result={authors} />
-
+      <Recommend show={page === 'recommend'} notify={createNotification} booksResult={books} />
       <Books show={page === 'books'} result={books} />
-
       <NewBook show={page === 'add'} notify={createNotification} />
     </div>
   );
