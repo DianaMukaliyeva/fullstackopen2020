@@ -6,14 +6,13 @@ import NewBook from './components/NewBook';
 import Notification from './components/Notification';
 import Recommend from './components/Recommend';
 import LoginForm from './components/LoginForm';
-import { ALL_AUTHORS, ALL_BOOKS, LOGIN } from './queries';
+import { ALL_AUTHORS, LOGIN } from './queries';
 
 const App = () => {
   const [page, setPage] = useState('authors');
   const [message, setMessage] = useState({ content: '', error: false });
   const authors = useQuery(ALL_AUTHORS);
   const [token, setToken] = useState(null);
-  const books = useQuery(ALL_BOOKS);
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
       setMessage(error.message, true);
@@ -61,8 +60,8 @@ const App = () => {
       <Notification message={message} />
       <LoginForm show={page === 'login'} login={login} />
       <Authors show={page === 'authors'} notify={createNotification} result={authors} />
-      <Recommend show={page === 'recommend'} notify={createNotification} booksResult={books} />
-      <Books show={page === 'books'} result={books} />
+      <Recommend show={page === 'recommend'} notify={createNotification} />
+      <Books show={page === 'books'} />
       <NewBook show={page === 'add'} notify={createNotification} />
     </div>
   );
