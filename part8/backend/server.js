@@ -91,9 +91,6 @@ const resolvers = {
     },
     allAuthors: () => Author.find({}),
   },
-  Author: {
-    bookCount: async (root) => await Book.find({ author: root.id }).countDocuments(),
-  },
   Mutation: {
     createUser: async (root, args) => {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre });
@@ -142,6 +139,10 @@ const resolvers = {
       let book = new Book({ ...args, author: author.id, id: uuid() });
       try {
         await book.save();
+        const bookCount = await Book.find({
+          author: author.id,
+        }).countDocuments();
+        await Author.findOneAndUpdate({ name: author.name }, { bookCount: bookCount });
       } catch (e) {
         throw new UserInputError(e.message, {
           invalidArgs: args,
