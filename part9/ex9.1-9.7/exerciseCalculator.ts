@@ -63,5 +63,9 @@ try {
   const { daily, target } = parseArgumentsIntoArray(process.argv);
   console.log(calculateExercises(daily, target));
 } catch (e) {
-  console.log('Error message:', e.message);
+  if (e instanceof Error) {
+    console.log('Error message:', e.message);
+  } else {
+    console.log('Something went wrong');
+  }
 }
