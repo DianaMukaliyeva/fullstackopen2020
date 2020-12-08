@@ -13,7 +13,7 @@ interface Result {
   average: number;
 }
 
-const calculateExercises = (daily: number[], target: number): Result => {
+export const calculateExercises = (daily: number[], target: number): Result => {
   const average = daily.reduce((a, b) => a + b) / daily.length;
   let rating = 3;
 
