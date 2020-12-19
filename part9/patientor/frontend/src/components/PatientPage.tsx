@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Patient, Gender } from '../types';
 import { apiBaseUrl } from '../constants';
 import { Header, Segment, Icon } from 'semantic-ui-react';
-import { useStateValue } from '../state';
+import { useStateValue, updatePatientInfo } from '../state';
 
 const getGender = (gender: Gender) => {
   switch (gender) {
@@ -28,7 +28,7 @@ const PatientPage = () => {
     const getPatientInfo = async (patientId: string) => {
       const { data: patient } = await axios.get(`${apiBaseUrl}/patients/${patientId}`);
       setPatientInfo(patient);
-      dispatch({ type: 'UPDATE_PATIENT_INFO', payload: patient });
+      dispatch(updatePatientInfo(patient));
     };
 
     if (patients[id] && patients[id].ssn) {

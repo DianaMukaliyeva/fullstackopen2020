@@ -1,19 +1,19 @@
-import React, { createContext, useContext, useReducer } from "react";
-import { Patient } from "../types";
+import React, { createContext, useContext, useReducer } from 'react';
+import { Patient } from '../types';
 
-import { Action } from "./reducer";
+import { Action } from './reducer';
 
 export type State = {
   patients: { [id: string]: Patient };
 };
 
 const initialState: State = {
-  patients: {}
+  patients: {},
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
   initialState,
-  () => initialState
+  () => initialState,
 ]);
 
 type StateProviderProps = {
@@ -23,13 +23,22 @@ type StateProviderProps = {
 
 export const StateProvider: React.FC<StateProviderProps> = ({
   reducer,
-  children
+  children,
 }: StateProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  return (
-    <StateContext.Provider value={[state, dispatch]}>
-      {children}
-    </StateContext.Provider>
-  );
+  return <StateContext.Provider value={[state, dispatch]}>{children}</StateContext.Provider>;
 };
+
 export const useStateValue = () => useContext(StateContext);
+
+export const setPatientList = (patientList: Patient[]): Action => {
+  return { type: 'SET_PATIENT_LIST', payload: patientList };
+};
+
+export const addPatient = (newPatient: Patient): Action => {
+  return { type: 'ADD_PATIENT', payload: newPatient };
+};
+
+export const updatePatientInfo = (patient: Patient): Action => {
+  return { type: 'UPDATE_PATIENT_INFO', payload: patient };
+};
