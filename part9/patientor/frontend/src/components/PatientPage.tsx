@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Patient, Gender } from '../types';
 import { apiBaseUrl } from '../constants';
-import { Header, Segment, Icon } from 'semantic-ui-react';
+import { Header, Segment, Icon, List } from 'semantic-ui-react';
 import { useStateValue, updatePatientInfo } from '../state';
 
 const getGender = (gender: Gender) => {
@@ -50,6 +50,19 @@ const PatientPage = () => {
       </Header>
       <div>ssn: {patientInfo.ssn}</div>
       <div>occupation: {patientInfo.occupation}</div>
+      <Header as="h3">entries</Header>
+      {patientInfo.entries.map((entry) => (
+        <div key={entry.id}>
+          <p>
+            {entry.date} {entry.description}
+          </p>
+          <List bulleted style={{ paddingLeft: '10px' }}>
+            {entry.diagnosisCodes?.map((code) => (
+              <List.Item key={code}>{code}</List.Item>
+            ))}
+          </List>
+        </div>
+      ))}
     </div>
   );
 };
