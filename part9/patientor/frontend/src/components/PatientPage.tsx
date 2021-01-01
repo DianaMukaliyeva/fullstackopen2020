@@ -21,7 +21,7 @@ const getGender = (gender: Gender) => {
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const [patientInfo, setPatientInfo] = React.useState<Patient | undefined>();
 
   React.useEffect(() => {
@@ -37,6 +37,13 @@ const PatientPage = () => {
       getPatientInfo(id);
     }
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const getDiagnosisName = (code: string): string => {
+    if (diagnoses[code]) {
+      return diagnoses[code].name;
+    }
+    return '';
+  };
 
   if (!patientInfo) {
     return <Segment>Patient does not exists</Segment>;
@@ -58,7 +65,9 @@ const PatientPage = () => {
           </p>
           <List bulleted style={{ paddingLeft: '10px' }}>
             {entry.diagnosisCodes?.map((code) => (
-              <List.Item key={code}>{code}</List.Item>
+              <List.Item key={code}>
+                {code} {getDiagnosisName(code)}
+              </List.Item>
             ))}
           </List>
         </div>
