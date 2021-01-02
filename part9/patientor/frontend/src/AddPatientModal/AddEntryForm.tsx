@@ -13,6 +13,7 @@ interface Props {
 
 const typeOptions: FieldOption[] = [
   { value: 'Hospital', label: 'Hospital' },
+  { value: 'OccupationalHealthcare', label: 'Occupational Healthcare' },
   { value: 'HealthCheck', label: 'Health Check' },
 ];
 
@@ -55,6 +56,20 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         errors.healthCheckRating =
           'Incorrect Health Check Rating. 0 - Healthy, 1 - LowRisk, 2 - HighRisk, 3 - CriticalRisk';
       }
+    } else if (values.type === 'OccupationalHealthcare') {
+      if (!values.sickLeaveStartDate) {
+        errors.sickLeaveStartDate = requiredError;
+      } else if (!isDate(values.sickLeaveStartDate)) {
+        errors.sickLeaveStartDate = 'Date should be in next format: YYYY-MM-DD';
+      }
+      if (!values.sickLeaveEndDate) {
+        errors.sickLeaveEndDate = requiredError;
+      } else if (!isDate(values.sickLeaveEndDate)) {
+        errors.sickLeaveEndDate = 'Date should be in next format: YYYY-MM-DD';
+      }
+      if (!values.employerName) {
+        errors.employerName = requiredError;
+      }
     }
     return errors;
   };
@@ -70,6 +85,9 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         dischargeDate: '',
         dischargeCriteria: '',
         healthCheckRating: 0,
+        employerName: '',
+        sickLeaveStartDate: '',
+        sickLeaveEndDate: '',
       }}
       onSubmit={onSubmit}
       validate={validate}>
@@ -114,6 +132,28 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                   component={NumberField}
                   min={0}
                   max={3}
+                />
+              </Segment>
+            )}
+            {values.type === 'OccupationalHealthcare' && (
+              <Segment>
+                <Field
+                  label="Employer Name"
+                  placeholder="Employer Name"
+                  name="employerName"
+                  component={TextField}
+                />
+                <Field
+                  label="Sick leave start date"
+                  placeholder="YYYY-MM-DD"
+                  name="sickLeaveStartDate"
+                  component={TextField}
+                />
+                <Field
+                  label="Sick leave end date"
+                  placeholder="YYYY-MM-DD"
+                  name="sickLeaveEndDate"
+                  component={TextField}
                 />
               </Segment>
             )}
