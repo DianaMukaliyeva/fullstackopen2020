@@ -13,6 +13,12 @@ interface Props {
 
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnoses }] = useStateValue();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isDate = (date: any): boolean => {
+    return Boolean(Date.parse(date));
+  };
+
   return (
     <Formik
       initialValues={{
@@ -32,6 +38,8 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         }
         if (!values.date) {
           errors.date = requiredError;
+        } else if (!isDate(values.date)) {
+          errors.date = 'Date should be in next format: YYYY-MM-DD';
         }
         if (!values.specialist) {
           errors.specialist = requiredError;
