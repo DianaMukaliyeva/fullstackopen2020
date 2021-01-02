@@ -2,10 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
+import { Header, Segment, Icon, List } from 'semantic-ui-react';
 import { Patient, Gender } from '../types';
 import { apiBaseUrl } from '../constants';
-import { Header, Segment, Icon, List } from 'semantic-ui-react';
 import { useStateValue, updatePatientInfo } from '../state';
+
+import EntryDetails from './EntryDetails';
 
 const getGender = (gender: Gender) => {
   switch (gender) {
@@ -59,18 +61,17 @@ const PatientPage = () => {
       <div>occupation: {patientInfo.occupation}</div>
       <Header as="h3">entries</Header>
       {patientInfo.entries.map((entry) => (
-        <div key={entry.id}>
-          <p>
-            {entry.date} {entry.description}
-          </p>
+        <Segment key={entry.id}>
+          <EntryDetails entry={entry} />
+
           <List bulleted style={{ paddingLeft: '10px' }}>
-            {entry.diagnosisCodes?.map((code) => (
+            {entry.diagnosisCodes?.map((code: string) => (
               <List.Item key={code}>
                 {code} {getDiagnosisName(code)}
               </List.Item>
             ))}
           </List>
-        </div>
+        </Segment>
       ))}
     </div>
   );
