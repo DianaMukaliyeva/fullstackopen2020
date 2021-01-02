@@ -38,7 +38,7 @@ const PatientPage = () => {
     } else {
       getPatientInfo(id);
     }
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const getDiagnosisName = (code: string): string => {
     if (diagnoses[code]) {
