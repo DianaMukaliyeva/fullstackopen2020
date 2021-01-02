@@ -1,11 +1,11 @@
-import React from "react";
-import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
-import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
-import { Diagnosis, Gender } from "../types";
+import React from 'react';
+import { ErrorMessage, Field, FieldProps, FormikProps } from 'formik';
+import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
+import { Diagnosis, Gender } from '../types';
 
 // structure of a single option
-export type GenderOption = {
-  value: Gender;
+export type FieldOption = {
+  value: Gender | string;
   label: string;
 };
 
@@ -13,18 +13,18 @@ export type GenderOption = {
 type SelectFieldProps = {
   name: string;
   label: string;
-  options: GenderOption[];
+  options: FieldOption[];
 };
 
 export const SelectField: React.FC<SelectFieldProps> = ({
   name,
   label,
-  options
+  options,
 }: SelectFieldProps) => (
   <Form.Field>
     <label>{label}</label>
     <Field as="select" name={name} className="ui dropdown">
-      {options.map(option => (
+      {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label || option.value}
         </option>
@@ -38,15 +38,11 @@ interface TextProps extends FieldProps {
   placeholder: string;
 }
 
-export const TextField: React.FC<TextProps> = ({
-  field,
-  label,
-  placeholder
-}) => (
+export const TextField: React.FC<TextProps> = ({ field, label, placeholder }) => (
   <Form.Field>
     <label>{label}</label>
     <Field placeholder={placeholder} {...field} />
-    <div style={{ color:'red' }}>
+    <div style={{ color: 'red' }}>
       <ErrorMessage name={field.name} />
     </div>
   </Form.Field>
@@ -65,9 +61,9 @@ interface NumberProps extends FieldProps {
 export const NumberField: React.FC<NumberProps> = ({ field, label, min, max }) => (
   <Form.Field>
     <label>{label}</label>
-    <Field {...field} type='number' min={min} max={max} />
+    <Field {...field} type="number" min={min} max={max} />
 
-    <div style={{ color:'red' }}>
+    <div style={{ color: 'red' }}>
       <ErrorMessage name={field.name} />
     </div>
   </Form.Field>
@@ -76,38 +72,28 @@ export const NumberField: React.FC<NumberProps> = ({ field, label, min, max }) =
 export const DiagnosisSelection = ({
   diagnoses,
   setFieldValue,
-  setFieldTouched
+  setFieldTouched,
 }: {
   diagnoses: Diagnosis[];
-  setFieldValue: FormikProps<{ diagnosisCodes: string[] }>["setFieldValue"];
-  setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>["setFieldTouched"];
+  setFieldValue: FormikProps<{ diagnosisCodes: string[] }>['setFieldValue'];
+  setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>['setFieldTouched'];
 }) => {
-  const field = "diagnosisCodes";
-  const onChange = (
-    _event: React.SyntheticEvent<HTMLElement, Event>,
-    data: DropdownProps
-  ) => {
+  const field = 'diagnosisCodes';
+  const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
     setFieldTouched(field, true);
     setFieldValue(field, data.value);
   };
 
-  const stateOptions = diagnoses.map(diagnosis => ({
+  const stateOptions = diagnoses.map((diagnosis) => ({
     key: diagnosis.code,
     text: `${diagnosis.name} (${diagnosis.code})`,
-    value: diagnosis.code
+    value: diagnosis.code,
   }));
 
   return (
     <Form.Field>
       <label>Diagnoses</label>
-      <Dropdown
-        fluid
-        multiple
-        search
-        selection
-        options={stateOptions}
-        onChange={onChange}
-      />
+      <Dropdown fluid multiple search selection options={stateOptions} onChange={onChange} />
       <ErrorMessage name={field} />
     </Form.Field>
   );

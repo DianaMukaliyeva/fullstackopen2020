@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Segment } from 'semantic-ui-react';
 import AddPatientForm, { PatientFormValues } from './AddPatientForm';
 import AddEntryForm from './AddEntryForm';
-import { NewDataEntry } from '../types';
+import { NewEntry } from '../types';
 
 interface Props {
   modalOpen: boolean;
@@ -15,7 +15,7 @@ interface PatientProps extends Props {
 }
 
 interface EntryProps extends Props {
-  onSubmit: (values: NewDataEntry) => void;
+  onSubmit: (values: NewEntry) => void;
 }
 
 export const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: PatientProps) => (

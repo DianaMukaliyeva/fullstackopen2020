@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 import { Header, Segment, Icon, List, Button } from 'semantic-ui-react';
-import { Patient, Gender, NewDataEntry, Entry } from '../types';
+import { Patient, Gender, NewEntry, Entry } from '../types';
 import { apiBaseUrl } from '../constants';
 import { useStateValue, updatePatientInfo } from '../state';
 
@@ -50,7 +50,7 @@ const PatientPage = () => {
     setError(undefined);
   };
 
-  const submitNewEntry = async (values: NewDataEntry) => {
+  const submitNewEntry = async (values: NewEntry) => {
     try {
       const { data: newEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${id}/entries`,

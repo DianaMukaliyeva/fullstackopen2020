@@ -63,4 +63,12 @@ export interface Patient {
   entries: Entry[];
 }
 
-export type NewDataEntry = Omit<HealthCheckEntry, 'id'>;
+export interface NewEntry extends Omit<BaseEntry, 'id'> {
+  type: string;
+  dischargeDate?: string;
+  dischargeCriteria?: string;
+  healthCheckRating?: number;
+  employerName?: string;
+  sickLeaveStartDate?: string;
+  sickLeaveEndDate?: string;
+}
