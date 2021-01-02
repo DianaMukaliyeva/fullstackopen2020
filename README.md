@@ -21,5 +21,5 @@ Partners and affiliates of the course include Houston Inc, Terveystalo, Elisa, K
 | 6    | State management with Redux                                  | 21        |
 | 7    | React router, custom hooks, styling app with CSS and webpack | 21        |
 | 8    | GraphQL                                                      | 26        |
-| 9    | Typescript                                                   |           |
+| 9    | Typescript                                                   | 27        |
 | 10   | React Native                                                 |           |
